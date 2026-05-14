@@ -25,7 +25,7 @@ class Account(models.Model):
         
     def save(self, *args, **kwargs):
         if self.pk:
-            old = Account.objects.get(pk=self.pk).only('password').first()
+            old = Account.objects.filter(pk=self.pk).only('password').first()
             if old is not None and old.password != self.password:
                     self.password_changed_at = timezone.now()
             else:

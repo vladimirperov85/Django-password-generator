@@ -21,3 +21,33 @@ def feedback(request):
 
 def info(request):
     return render(request,'vault/info.html')
+
+def main_page_1(request):
+    return render(request,'vault/main-page-1.html')
+
+def main_page_2(request):
+    return render(request,'vault/main-page-2.html')
+
+
+def main_page_3(request):
+    return render(request,'vault/main-page-3.html')
+
+
+def gen_page_1(request):
+    return render(request,'vault/gen-page-1.html')
+
+
+def gen_page_2(request):
+    return render(request,'vault/gen-page-2.html')
+
+def gen_page_3(request):
+    return render(request,'vault/gen-page-3.html')
+
+def news_page_1(request):
+    return render(request,'vault/news-page-1.html')
+
+def news_page_2(request):
+    return render(request,'vault/news-page-2.html')
+
+def news_page_3(request):
+    return render(request,'vault/news-page-3.html')

@@ -13,7 +13,8 @@ class AccountForm(forms.ModelForm):
         
 # Форма для регистрации пользователя
 class RegistrationForm(UserCreationForm):
-    model = User
-    fields = ('username',)
+    class Meta:
+        model = User
+        fields = ('username',)
 
 

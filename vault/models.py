@@ -1,10 +1,13 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from django.contrib.auth import get_user_model
 # Create your models here.
+
+USER = get_user_model()
 class Account(models.Model):
     owner = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        USER,
         on_delete=models.CASCADE,
         related_name='accounts',
         verbose_name='Владелец'
@@ -17,7 +20,7 @@ class Account(models.Model):
 
     class Meta:
         verbose_name = 'Учетная запись'
-        verbose_name_plural = 'Учетные запись'
+        verbose_name_plural = 'Учетные записи'
         ordering = ['-created_at']
 
     def __str__(self):

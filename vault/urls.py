@@ -1,8 +1,13 @@
 
 from django.urls import path
-from . import views  
+from . import views, register_view
 
 urlpatterns = [ 
+    path('register/',register_view, name='register_view'),
+
+
+
+
     path('about/', views.about, name='about'),
     path('detail/', views.datail, name='datail'),
     path('help/', views.help, name='help'),

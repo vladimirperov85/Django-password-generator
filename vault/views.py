@@ -1,8 +1,27 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+# Было (неправильно):
+from .forms import RegistrationForm
+
+# Стало (правильно):
+from .forms import RegistrationForm
 # Create your views here.
 def home(request):
     return render(request,'vault/home.html')
+
+def register_view(request):
+    form = RegistrationForm()
+    context = {'form': form}
+    return render(request,template_name='vault/register.html',context=context)
+
+
+
+
+
+
+
+
+
 
 def about(request):
     return render(request,'vault/about.html')

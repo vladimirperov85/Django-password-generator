@@ -19,4 +19,7 @@ urlpatterns = [
     path("news/news-page-2/", views.news_page_2, name="news-page-2"),
     path("news/news-page-3/", views.news_page_3, name="news-page-3"),
     path("info/detail/", views.datail, name="detail"),
+    path("index/", views.index, name="index")
+
+
 ]

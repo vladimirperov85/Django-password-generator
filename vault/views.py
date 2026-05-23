@@ -20,7 +20,29 @@ def register_view(request):
 
 
 def index(request):
-    return render(request, "index.html", context={"my_date": datetime.now()})
+    return render(request, "vault/index.html")
+
+def postuser(request):
+    # получаем из данных запроса POST отправленные через форму данные
+    name = request.POST.get("name", "Undefined")
+    age = request.POST.get("age", 1)
+    return HttpResponse(f"<h2>Name: {name}  Age: {age}</h2>")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def about(request):
     return render(request, "vault/about.html")

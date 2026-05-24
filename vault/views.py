@@ -1,10 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from datetime import datetime 
-# Было (неправильно):
-from .forms import RegistrationForm
-
-# Стало (правильно):
 from .forms import RegistrationForm
 
 
@@ -26,7 +22,11 @@ def postuser(request):
     # получаем из данных запроса POST отправленные через форму данные
     name = request.POST.get("name", "Undefined")
     age = request.POST.get("age", 1)
-    return HttpResponse(f"<h2>Name: {name}  Age: {age}</h2>")
+    langs = request.POST.getlist("languages", ["python"])
+    return HttpResponse(f"""
+                <div>Name: {name}  Age: {age}<div>
+                <div>Languages: {langs}</div>
+            """)
 
 
 

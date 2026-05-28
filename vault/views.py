@@ -50,7 +50,7 @@ def login_view(request):
 
         error = "Invalid username or password"
     error = None
-    return render(request, template_name="vault/index.html",context={"errors":error})
+    return render(request, template_name="vault/login.html",context={"errors":error})
     
 
 

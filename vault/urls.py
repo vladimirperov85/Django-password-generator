@@ -21,6 +21,6 @@ urlpatterns = [
     path("info/detail/", views.datail, name="detail"),
     path("index/", views.index, name="index"),
     path("postuser/", views.postuser, name ="postuser"),
-
+    path("login/", views.login_view, name="login"),
 
 ]

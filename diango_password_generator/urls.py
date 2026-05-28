@@ -28,7 +28,7 @@ urlpatterns = [
     path('main-page-2/', views.main_page_2, name='main_page_2'),
     path('main-page-3/', views.main_page_3, name='main_page_3'),
     path("users/",include("vault.urls")),
-    path("register/",include("vault.urls"))
+    
     
 
 ]

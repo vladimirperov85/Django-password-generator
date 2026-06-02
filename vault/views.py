@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from datetime import datetime 
 from .forms import RegistrationForm
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
+from django.views.decorators.http import require_http_methods
+from .models import Account
 
 
 # Create your views here.
@@ -53,26 +55,19 @@ def login_view(request):
     return render(request, template_name="vault/login.html",context={"errors":error})
     
 
+def account_list_view(request):
+    """ Страница со списком учетных записей"""
+
+    accounts = Account.objects.filter(owner=request.user)
+    context = {"accounts":accounts}
+    return render(request,template_name= 'vault/account_list.html', context=context)
+
+@require_http_methods({'POST'})
+def logout_view(request):
+    logout(request)
+    return redirect('login')
 
 
-
-
-
-
-
-
-def index(request):
-    return render(request, "vault/index.html")
-
-def postuser(request):
-    # получаем из данных запроса POST отправленные через форму данные
-    name = request.POST.get("name", "Undefined")
-    age = request.POST.get("age", 1)
-    langs = request.POST.getlist("languages", ["python"])
-    return HttpResponse(f"""
-                <div>Name: {name}  Age: {age}<div>
-                <div>Languages: {langs}</div>
-            """)
 
 
 
@@ -93,58 +88,3 @@ def postuser(request):
 def about(request):
     return render(request, "vault/about.html")
 
-
-def help(request):
-    return render(request, "vault/help.html")
-
-
-def contacts(request):
-    return render(request, "vault/contacts.html")
-
-
-def datail(request):
-    return render(request, "vault/datail.html")
-
-
-def feedback(request):
-    return render(request, "vault/feedback.html")
-
-
-def info(request):
-    return render(request, "vault/info.html")
-
-
-def main_page_1(request):
-    return render(request, "vault/main-page-1.html")
-
-
-def main_page_2(request):
-    return render(request, "vault/main-page-2.html")
-
-
-def main_page_3(request):
-    return render(request, "vault/main-page-3.html")
-
-
-def gen_page_1(request):
-    return render(request, "vault/gen-page-1.html")
-
-
-def gen_page_2(request):
-    return render(request, "vault/gen-page-2.html")
-
-
-def gen_page_3(request):
-    return render(request, "vault/gen-page-3.html")
-
-
-def news_page_1(request):
-    return render(request, "vault/news-page-1.html")
-
-
-def news_page_2(request):
-    return render(request, "vault/news-page-2.html")
-
-
-def news_page_3(request):
-    return render(request, "vault/news-page-3.html")

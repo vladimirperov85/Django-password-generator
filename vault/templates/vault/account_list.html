@@ -1,0 +1,35 @@
+{% extends "vault/base.html" %}
+{% block title %} Мои учетные записи {% endblock title %}
+
+{% block content %}
+<h1>Мои учетные записи</h1>
+<p>
+<a class = 'btn' href="">Добавить учетную запись</a>
+</p>
+{% if accounts %}
+    <table>
+        <thead>
+            <tr>
+                <th>Сайт</th>
+                <th>Логин</th>
+                <th>Пароль</th>
+                <th>Дата создания</th>
+                <th>Дата изменения пароля</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for account in accounts %}
+            <tr>
+                <td>{{ account.site }}</td>
+                <td>{{ account.login }}</td>
+                <td>{{ account.password }}</td>
+                <td>{{ account.created_at }}</td>
+                <td>{{ account.password_changed_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>У вас нет учетных записей</p>
+{% endif %}  
+{% endblock content %}

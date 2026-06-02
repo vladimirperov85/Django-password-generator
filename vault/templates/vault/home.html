@@ -1,15 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>Title</title>
-    </head>
-    <body>
-        <h1>О сайте</h1>
-        <p>Контакты</p>
-        <p><a href ='{% url "help" %}'>Помощь</a></p> 
-        <p><a href ='{% url "about" %}'>О сайте</p>
-        <p><a href ='{% url "contacts" %}'>Контаты</a></p>
-
-    </body>
-</html>
+{% extends "vault/base.html" %}
+{% load static %}
+{% block content %}
+<img src="{% static 'img\i.jpg' %}" width="300px" height="300px">
+<div class="my-style"> Moй генератор парола</div>
+{% endblock %}

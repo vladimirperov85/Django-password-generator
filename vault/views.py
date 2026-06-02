@@ -62,7 +62,7 @@ def account_list_view(request):
     context = {"accounts":accounts}
     return render(request,template_name= 'vault/account_list.html', context=context)
 
-@require_http_methods({'POST'})
+@require_http_methods(['POST'])
 def logout_view(request):
     logout(request)
     return redirect('login')

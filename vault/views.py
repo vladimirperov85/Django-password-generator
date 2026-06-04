@@ -5,6 +5,7 @@ from .forms import RegistrationForm,AccountForm
 from django.contrib.auth import login, authenticate, logout
 from django.views.decorators.http import require_http_methods
 from .models import Account
+from django.contrib.auth.decorators import login_required
 import string
 import secrets
 # -----------генератор пароля
@@ -17,19 +18,19 @@ def generate_password(length = 16,use_digits = True,use_special = True):
         alphabet += "!@#$%^&*()-_+="
     return ''.join(secrets.choice(alphabet) for _ in range(length))
 
-def _password_option(request):
+def _password_options(request):
     # считываем опции из запроса и при необходимости возвращает пароль.
     # Возвращаемый словарь полей
     # gen_length:текущая длина пароля
-    # gen_digits:включены цифры
-    # gen_special:включены спецсимволы
+    # gen_digits:включены цифры(для чекбокса)
+    # gen_special:включены спецсимволы(для чекбока)
     # generated_password:cгенерированный пароль
-    # Пароль создается по нажатию кнопки "Сгенерировать пароль"
-
-    is_generate = request.POST.get('generate') == '1'
+    # Пароль создается(только если в  GET явно есть generate=1) по нажатию кнопки "Сгенерировать пароль" или None
+    
+    is_generate = request.GET.get('generate') == '1'
     # длина пароля
     try:
-        length = int(request.POST.get('gen_length',16))
+        length = int(request.GET.get('length',16))
     except (TypeError,ValueError):
         length = 16
 
@@ -97,7 +98,7 @@ def login_view(request):
     error = None
     return render(request, template_name="vault/login.html",context={"errors":error})
     
-
+@login_required
 def account_list_view(request):
     """ Страница со списком учетных записей"""
 
@@ -105,56 +106,38 @@ def account_list_view(request):
     context = {"accounts":accounts}
     return render(request,template_name= 'vault/account_list.html', context=context)
 
-<<<<<<< HEAD
-def account_create_view(request):
-    if request.method == "POST":
-        form = AccountForm(request.POST)
-        if form.is_valid():
-            account = form.save(commit=False)
-            # привязываем учетную запись к пользователю
-            account.owner = request.user
-            account.save()
-            return redirect('account_list')
-        opts = _password_option(request)
-    else:
-        opts = _password_option(request)
-        initial = {}
-        if opts['generated_password']:
-            initial['password'] = opts['generated_password']
-        form = AccountForm(initial=initial)
-    context = {'form':form,**opts}
-    return render(request, template_name="vault/account_form.html", context=context)
-
-
-@require_http_methods({'POST'})
-=======
 @require_http_methods(['POST'])
->>>>>>> 6346e3f9a184ddac9c466da9e821b0c383faf762
 def logout_view(request):
     logout(request)
     return redirect('login')
 
 
+@login_required
 def account_create_view(request):
-    # добавление новой учетной записи
+    if request.method == "POST":
+        form = AccountForm(request.POST)
+        print(f"[DEBUG] POST-данные: {request.POST}")
+        if form.is_valid():
+            account = form.save(commit=False)
+            account.owner = request.user
+            try:
+                account.save()
+                print(f"[✅ SUCCESS] Account saved: id={account.id}, site={account.site}, owner_id={account.owner_id}")
+                return redirect('account_list')
+            except Exception as e:
+                print(f"[❌ SAVE ERROR] {e}")
+        else:
+            print(f"[❌ FORM ERRORS] {form.errors}")
+    else:
+        opts = _password_options(request)
+        initial = {}
+        if opts.get('generated_password'):
+            initial['password'] = opts['generated_password']
+        form = AccountForm(initial=initial)
+        return render(request, "vault/account_form.html", {'form': form, **opts})
 
-    form = AccountForm()
-    context = {'form':form}
-    return render(request, template_name="vault/account_form.html", context=context)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    opts = _password_options(request)
+    return render(request, "vault/account_form.html", {'form': form, **opts})
 
 
 def about(request):

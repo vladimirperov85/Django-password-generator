@@ -36,6 +36,9 @@ class Account(models.Model):
             else:
                 if not self.password_changed_at:
                     self.password_changed_at = timezone.now()
+        # Для новых объектов устанавливаем password_changed_at если не задан
+        if not self.pk and not self.password_changed_at:
+            self.password_changed_at = timezone.now()
 
             super().save(*args, **kwargs)
             

@@ -4,6 +4,8 @@
 
 {% block content %}
 
+
+
 <!-- Форма для настройки генерации пароля (GET-запрос) -->
 <form method="get" style="border:1px solid #ccc; padding:10px; margin-bottom:16px;">
     <strong>Параметры генерации пароля</strong>
@@ -16,7 +18,7 @@
 
     <label>
         <input type="checkbox" name="digits" {% if gen_digits %}checked{% endif %}>
-        Цифры
+    
     </label><br>
     <small>Использовать цифры (0-9)</small>
 
@@ -25,7 +27,7 @@
             <input type="checkbox" name="special" {% if gen_special %}checked{% endif %}>
             Спецсимволы
         </label><br>
-        <small>Использовать спецсимволы (!@#$%^&)</small>
+        <small>Использовать спецсимволы (!@#$%^&;*()_+=)</small>
     </p>
 
     <button class="btn btn-secondary" type="submit">Сгенерировать</button>
@@ -34,7 +36,7 @@
         <hr style="margin: 12px 0;">
         <p class="muted">
             Сгенерированный пароль: <code>{{ generated_password }}</code><br>
-            Он подставлен в поле для пароля.
+            Он подставлен в поле "пароль ниже". Нажмите "Добавить",что бы сохранить.
         </p>
     {% endif %}
 </form>

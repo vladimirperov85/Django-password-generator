@@ -33,7 +33,7 @@
  {% if user.is_authenticated %} 
  &nbsp;|&nbsp; 
  <a href="{% url 'account_list' %}">Мои записи</a> 
- <a href="">Добавить</a> 
+ <a href="{% url 'account_create' %}">Добавить</a> 
  {% endif %} 
  </div> 
  

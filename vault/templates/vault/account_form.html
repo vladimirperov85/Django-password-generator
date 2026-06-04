@@ -1,0 +1,51 @@
+
+{% extends "vault/base.html" %}
+{% block title %} Добавление учетной записи {% endblock title %}
+
+{% block content %}
+
+<!-- Форма для настройки генерации пароля (GET-запрос) -->
+<form method="get" style="border:1px solid #ccc; padding:10px; margin-bottom:16px;">
+    <strong>Параметры генерации пароля</strong>
+    <input type="hidden" name="generate" value="1">
+    
+    <p>
+        <label for="id_length">Длина пароля (от 4 до 128)</label>
+        <input type="number" id="id_length" name="length" min="4" max="128" value="{{ gen_length }}">
+    </p>
+
+    <label>
+        <input type="checkbox" name="digits" {% if gen_digits %}checked{% endif %}>
+        Цифры
+    </label><br>
+    <small>Использовать цифры (0-9)</small>
+
+    <p>
+        <label>
+            <input type="checkbox" name="special" {% if gen_special %}checked{% endif %}>
+            Спецсимволы
+        </label><br>
+        <small>Использовать спецсимволы (!@#$%^&)</small>
+    </p>
+
+    <button class="btn btn-secondary" type="submit">Сгенерировать</button>
+
+    {% if generated_password %}
+        <hr style="margin: 12px 0;">
+        <p class="muted">
+            Сгенерированный пароль: <code>{{ generated_password }}</code><br>
+            Он подставлен в поле для пароля.
+        </p>
+    {% endif %}
+</form>
+<!-- Конец GET-формы -->
+
+<!-- Форма добавления учётной записи (POST-запрос) -->
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn" type="submit">Добавить</button>
+</form>
+
+{% endblock content %}
+

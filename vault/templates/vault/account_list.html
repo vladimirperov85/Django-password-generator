@@ -4,7 +4,7 @@
 {% block content %}
 <h1>Мои учетные записи</h1>
 <p>
-<a class = 'btn' href="">Добавить учетную запись</a>
+<a class = 'btn' href="{% url 'account_create' %}">Добавить учетную запись</a>
 </p>
 {% if accounts %}
     <table>

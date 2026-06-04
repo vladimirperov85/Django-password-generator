@@ -105,6 +105,7 @@ def account_list_view(request):
     context = {"accounts":accounts}
     return render(request,template_name= 'vault/account_list.html', context=context)
 
+<<<<<<< HEAD
 def account_create_view(request):
     if request.method == "POST":
         form = AccountForm(request.POST)
@@ -126,6 +127,9 @@ def account_create_view(request):
 
 
 @require_http_methods({'POST'})
+=======
+@require_http_methods(['POST'])
+>>>>>>> 6346e3f9a184ddac9c466da9e821b0c383faf762
 def logout_view(request):
     logout(request)
     return redirect('login')

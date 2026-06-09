@@ -12,14 +12,16 @@
             <tr>
                 <th>Сайт</th>
                 <th>Логин</th>
+                <th>Пользователь</th>
                 <th>Пароль</th>
-                <th>Дата создания</th>
+                <th>Дата создания пароля</th>
                 <th>Дата изменения пароля</th>
             </tr>
         </thead>
         <tbody>
             {% for account in accounts %}
             <tr>
+                <td><a href="{% url 'account_detail' pk=account.pk %}">{{ account.site }}</a></td> 
                 <td>{{ account.site }}</td>
                 <td>{{ account.login }}</td>
                 <td>{{ account.password }}</td>

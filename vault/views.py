@@ -144,15 +144,24 @@ def account_create_view(request):
 def about(request):
     return render(request, "vault/about.html")
 
+
+
+
 def account_detail_view(request, pk):
     account = Account.objects.filter(pk=pk).first()
     context = {"account":account}
     return render(request,template_name= "vault/account_detail.html",context=context)
 
+
+
+
+
+
 def account_edit_view(request,pk):
     # Получаем запись по pk или возвращаем 404
     account = get_object_or_404(Account, pk=pk,owner = request.user)
     if request.method == "POST":
+        # заполняем форму данными полученного аккаунта
         form = AccountForm(request.POST,instance=account)
         if form.is_valid():
             form.save()

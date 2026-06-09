@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from datetime import datetime 
 from .forms import RegistrationForm,AccountForm
@@ -8,6 +8,7 @@ from .models import Account
 from django.contrib.auth.decorators import login_required
 import string
 import secrets
+
 # -----------генератор пароля
 def generate_password(length = 16,use_digits = True,use_special = True):
     # базовый алфавит - буквы в обоих регистрах
@@ -142,4 +143,29 @@ def account_create_view(request):
 
 def about(request):
     return render(request, "vault/about.html")
+
+def account_detail_view(request, pk):
+    account = Account.objects.filter(pk=pk).first()
+    context = {"account":account}
+    return render(request,template_name= "vault/account_detail.html",context=context)
+
+def account_edit_view(request,pk):
+    # Получаем запись по pk или возвращаем 404
+    account = get_object_or_404(Account, pk=pk,owner = request.user)
+    if request.method == "POST":
+        form = AccountForm(request.POST,instance=account)
+        if form.is_valid():
+            form.save()
+            return redirect('account_detail',pk = account.pk)
+        
+        opts = _password_options(request)
+    else:
+        opts = _password_options(request)
+        if opts['generated_password']:
+            form = AccountForm(instance=account, 
+                            initial={'password': opts['generated_password']})
+        else:
+            form = AccountForm(instance=account)
+    return render(request, "vault/account_form.html", {'form': form, **opts})
+    
 

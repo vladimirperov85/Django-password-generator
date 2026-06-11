@@ -1,37 +1,65 @@
 {% extends "vault/base.html" %}
-{% block title %} Мои учетные записи {% endblock title %}
+{% block title %}Мои учетные записи{% endblock title %}
 
 {% block content %}
-<h1>Мои учетные записи</h1>
-<p>
-<a class = 'btn' href="{% url 'account_create' %}">Добавить учетную запись</a>
-</p>
-{% if accounts %}
-    <table>
-        <thead>
-            <tr>
-                <th>Сайт</th>
-                <th>Логин</th>
-                <th>Пользователь</th>
-                <th>Пароль</th>
-                <th>Дата создания пароля</th>
-                <th>Дата изменения пароля</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for account in accounts %}
-            <tr>
-                <td><a href="{% url 'account_detail' pk=account.pk %}">{{ account.site }}</a></td> 
-                <td>{{ account.site }}</td>
-                <td>{{ account.login }}</td>
-                <td>{{ account.password }}</td>
-                <td>{{ account.created_at }}</td>
-                <td>{{ account.password_changed_at }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% else %}
-    <p>У вас нет учетных записей</p>
-{% endif %}  
+    <h1>Мои учетные записи</h1>
+    <p>
+        <a class="btn" href="{% url 'account_create' %}">Добавить учетную запись</a>
+    </p>
+
+    {% if accounts %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Сайт</th>
+                    <th>Логин</th>
+                    <th>Пароль</th>
+                    <th>Дата создания</th>
+                    <th>Дата изменения пароля</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for account in accounts %}
+                <tr>
+                    <td>
+                        <a href="{% url 'account_detail' pk=account.pk %}">
+                            {{ account.site }}
+                        </a>
+                    </td>
+                    <td>{{ account.login }}</td>
+                    <td>{{ account.password }}</td>
+                    <td>{{ account.created_at|date:"d.m.Y" }}</td>
+                    <td>{{ account.password_changed_at|date:"d.m.Y" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <span>Всего учетных записей {{count}}</span>
+        <p class="muted">
+            Показано {{accounts|length}} из {{accounts.paginator.count}} записей
+
+        </p>
+
+        <!-- Пагинация -->
+        {% if accounts.has_other_pages %}
+            <div class="pagination">
+                {% if accounts.has_previous %}
+                    <a href="?page=1">&laquo; Первая</a>
+                    <a href="?page={{ accounts.previous_page_number }}">Назад</a>
+                {% endif %}
+
+                <span>
+                    Страница {{ accounts.number }} из {{ accounts.paginator.num_pages }}
+                </span>
+
+                {% if accounts.has_next %}
+                    <a href="?page={{ accounts.next_page_number }}">Вперед</a>
+                    <a href="?page={{ accounts.paginator.num_pages }}">Последняя</a>
+                {% endif %}
+            </div>
+        {% endif %}
+
+    {% else %}
+        <p>У вас нет учетных записей</p>
+    {% endif %}
 {% endblock content %}

@@ -8,7 +8,7 @@ from .models import Account
 from django.contrib.auth.decorators import login_required
 import string
 import secrets
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # -----------генератор пароля
 def generate_password(length = 16,use_digits = True,use_special = True):
     # базовый алфавит - буквы в обоих регистрах
@@ -93,8 +93,10 @@ def login_view(request):
         if user is not None:
             # авторизуем пользователя
             login(request,user)
-            return redirect('/') # tODO: redirect to main page
-
+            next_url = request.GET.get('next')
+            if next_url:
+                return redirect(next_url) 
+            return redirect('/') 
         error = "Invalid username or password"
     error = None
     return render(request, template_name="vault/login.html",context={"errors":error})
@@ -104,7 +106,11 @@ def account_list_view(request):
     """ Страница со списком учетных записей"""
 
     accounts = Account.objects.filter(owner=request.user)
-    context = {"accounts":accounts}
+    paginator = Paginator(accounts,3)  
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    count = accounts.count()
+    context = {"accounts":page_obj,"count":count}
     return render(request,template_name= 'vault/account_list.html', context=context)
 
 @require_http_methods(['POST'])
@@ -146,7 +152,7 @@ def about(request):
 
 
 
-
+@login_required
 def account_detail_view(request, pk):
     account = Account.objects.filter(pk=pk).first()
     context = {"account":account}
@@ -156,7 +162,7 @@ def account_detail_view(request, pk):
 
 
 
-
+@login_required
 def account_edit_view(request,pk):
     # Получаем запись по pk или возвращаем 404
     account = get_object_or_404(Account, pk=pk,owner = request.user)
@@ -177,4 +183,13 @@ def account_edit_view(request,pk):
             form = AccountForm(instance=account)
     return render(request, "vault/account_form.html", {'form': form, **opts})
     
-
+@login_required
+def account_delete_view(request,pk):
+    # GET - показываем страницу с подтверждением удаления
+    # POST - удаляем запись, возващаемся на список учетных записей.
+    account = get_object_or_404(Account, pk=pk,owner = request.user)
+    if request.method == "POST":
+        account.delete()
+        return redirect('account_list')
+    return render(request, template_name="vault/account_confirm_delete.html",
+                context = {'account':account})

@@ -106,7 +106,7 @@ def account_list_view(request):
     """ Страница со списком учетных записей"""
 
     accounts = Account.objects.filter(owner=request.user)
-    paginator = Paginator(accounts,3)  
+    paginator = Paginator(accounts,1)  
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     count = accounts.count()
